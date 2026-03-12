@@ -52,31 +52,49 @@ class _CPXBrowserViewState extends State<CPXBrowserView> {
     super.initState();
   }
 
-  _initWebView() => _webController = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(const Color(0x00000000))
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onPageStarted: (start) {
-          if (mounted) setState(() => isLoading = true);
-        },
-        onPageFinished: (finish) {
-          if (mounted) setState(() => isLoading = false);
-        },
-        onWebResourceError: (error) {
-          HapticFeedback.selectionClick();
-          if ((error.errorCode == -1 && Platform.isAndroid) ||
-              (error.errorCode == -1022 && Platform.isIOS)) {
-            setState(() => isAlertDisplayed = true);
+ _initWebView() => _webController = WebViewController()
+  ..setJavaScriptMode(JavaScriptMode.unrestricted)
+  ..setBackgroundColor(const Color(0x00000000))
+  ..setNavigationDelegate(
+    NavigationDelegate(
+      onPageStarted: (start) {
+        if (mounted) setState(() => isLoading = true);
+      },
+      onPageFinished: (finish) async {
+        if (mounted) setState(() => isLoading = false);
+
+        // ✅ Disable Zoom (Pinch + Double Tap)
+        await _webController?.runJavaScript('''
+          var meta = document.querySelector('meta[name="viewport"]');
+          if (meta) {
+            meta.setAttribute("content", 
+              "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no");
+          } else {
+            meta = document.createElement('meta');
+            meta.name = "viewport";
+            meta.content = 
+              "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+            document.getElementsByTagName('head')[0].appendChild(meta);
           }
-          CPXLogger.log(
-              "Browser error: ${error.errorCode} | ${error.description}");
-          CPXNetworkService().onWebViewError(error.errorCode.toString(),
-              error.description, error.url ?? "no url");
-        },
-      ),
-    )
-    ..loadRequest(CPXBrowserTab.home.url);
+        ''');
+      },
+      onWebResourceError: (error) {
+        HapticFeedback.selectionClick();
+        if ((error.errorCode == -1 && Platform.isAndroid) ||
+            (error.errorCode == -1022 && Platform.isIOS)) {
+          setState(() => isAlertDisplayed = true);
+        }
+        CPXLogger.log(
+            "Browser error: ${error.errorCode} | ${error.description}");
+        CPXNetworkService().onWebViewError(
+            error.errorCode.toString(),
+            error.description,
+            error.url ?? "no url");
+      },
+    ),
+  )
+  ..loadRequest(CPXBrowserTab.home.url);
+
 
   @override
   Widget build(BuildContext context) => SafeArea(
