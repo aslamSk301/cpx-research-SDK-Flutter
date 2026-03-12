@@ -43,7 +43,7 @@ Click the image to watch a step-by-step tutorial on how to use the SDK.
 dependencies:
   cpx_research_sdk_flutter:
     git: 
-      url: https://github.com/MakeOpinionGmbH/cpx-research-SDK-Flutter.git
+      url: https://github.com/aslamSk301/cpx-research-SDK-Flutter.git
       path: cpx_research_sdk_flutter
       // without a ref Flutter uses the main branch by default
       // use ref to get different versions, like 0.3.1 or 0.4.1
@@ -238,7 +238,25 @@ Widget build(BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text('Flutter SDK Demo App'),
-        CPXSurveyCards(),
+
+        // Customizable Survey Cards
+        CPXSurveyCards(
+          hideIfEmpty: true,
+
+          // Widget shown when no surveys are available
+          noSurveysWidget: Text('No surveys available'),
+
+          // Card customization
+          config: CPXCardConfig(
+            accentColor: Colors.orange,          // Color used for payout, icons and highlights
+            cardBackgroundColor: Colors.white,   // Card background color
+            textColor: Colors.black,             // Survey duration text color
+            payoutColor: Colors.red,             // Special payout color
+            starColor: Colors.amber,             // Active rating stars
+            inactiveStarColor: Colors.grey,      // Inactive rating stars
+            cardCount: 3,                        // Number of visible cards
+          ),
+        ),
       ],
     ),
   );
