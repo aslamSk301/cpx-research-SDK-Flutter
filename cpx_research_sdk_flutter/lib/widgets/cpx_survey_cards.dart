@@ -49,58 +49,30 @@ class _CPXSurveyCardsState extends State<CPXSurveyCards> {
 
   Widget _defaultCPXCardBuilder(
       List<Survey> surveys, CPXCardConfig config, CPXText? text) {
-    if (surveys.isNotEmpty) {
-      return SizedBox(
-        height: MediaQuery.of(context).size.width /
-                (MediaQuery.of(context).orientation == Orientation.portrait
-                    ? config.cardCount
-                    : config.cardCount * 2.5) +
-            30,
-        child: GridView.builder(
-          padding: widget.padding ??
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          itemCount: surveys.length,
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            mainAxisSpacing: 5,
-          ),
-          itemBuilder: (BuildContext context, int index) =>
-              _CPXCard(surveys[index], config, text),
-        ),
-      );
-    }
+    final cardHeight = MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).orientation == Orientation.portrait
+                ? config.cardCount
+                : config.cardCount * 2.5) +
+        30;
 
-    if (widget.hideIfEmpty) {
-      return const SizedBox();
-    }
-
-    return widget.noSurveysWidget ?? _shimmerLoader();
-  }
-
-  Widget _shimmerLoader() {
     return SizedBox(
-      height: 140,
-      child: ListView.builder(
+      height: cardHeight,
+      child: GridView.builder(
+        padding: widget.padding ??
+            const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        itemCount: surveys.isNotEmpty ? surveys.length : config.cardCount,
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        itemCount: config.cardCount,
-        itemBuilder: (_, __) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-              child: Container(
-                width: 120,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-          );
+        physics: const BouncingScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 1,
+          mainAxisSpacing: 5,
+        ),
+        itemBuilder: (context, index) {
+          if (surveys.isNotEmpty) {
+            return _CPXCard(surveys[index], config, text);
+          } else {
+            return _CPXCardShimmer(config);
+          }
         },
       ),
     );
@@ -242,6 +214,29 @@ class _CPXCard extends StatelessWidget {
             ),
             FittedBox(child: _getStars()),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CPXCardShimmer extends StatelessWidget {
+  final CPXCardConfig config;
+
+  const _CPXCardShimmer(this.config);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Container(
+          decoration: BoxDecoration(
+            color: config.cardBackgroundColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
       ),
     );

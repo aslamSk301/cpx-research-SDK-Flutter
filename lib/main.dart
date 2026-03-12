@@ -38,7 +38,7 @@ CPXStyle notificationStyle = CPXStyle(
 );
 
 CPXConfig config = CPXConfig(
-  appID: "31629",
+  appID: "1",
   userID: "flutterTempUser",
   accentColor: Color(0xffFFAF20),
   cornerWidget: cornerStyle,
@@ -143,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(
                   onPressed: () => showCPXBrowserDialog(
                       context: context,
-                      config: CPXConfig(appID: "31629", userID: "1")),
+                      config: CPXConfig(appID: "1", userID: "1")),
                   child: Text("Show CPX Browser Dialog"),
                 ),
                 SizedBox(height: 10),
@@ -209,7 +209,7 @@ class SecondRoute extends StatelessWidget {
             ),
             CPXResearch(
               config: CPXConfig(
-                appID: "31629",
+                appID: "1",
                 userID: "userid",
                 sidebarWidget: CPXStyle(),
               ),
