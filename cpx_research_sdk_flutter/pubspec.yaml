@@ -4,7 +4,7 @@ version: 1.1.0
 homepage: https://www.makeopinion.com
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -12,6 +12,7 @@ dependencies:
   http: ^1.5.0
   webview_flutter: ^4.13.0
   json_annotation: ^4.9.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

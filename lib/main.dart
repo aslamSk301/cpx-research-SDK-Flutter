@@ -127,8 +127,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 Text('Version 1.1.0'),
                 SizedBox(height: 20),
                 CPXSurveyCards(
-                  noSurveysWidget:
-                      Text('I show up, if there are no surveys available'),
+                  config: CPXCardConfig(
+                    accentColor: Colors.orange,
+                    cardBackgroundColor: Colors.white,
+                    textColor: Colors.black,
+                  ),
                 ),
                 SizedBox(height: 10),
                 Divider(color: Colors.black12),
