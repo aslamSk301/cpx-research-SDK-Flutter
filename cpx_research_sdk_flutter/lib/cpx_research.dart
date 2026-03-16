@@ -58,6 +58,16 @@ class _CPXResearchState extends State<CPXResearch> with WidgetsBindingObserver {
     _startTimer();
   }
 
+  @override
+  Future<bool> didPopRoute() async {
+    if (CPXController.controller.isCPXResearchLayerDisplayed.value &&
+        !CPXController.controller.areCPXWidgetsDisplayed.value) {
+      CPXController.controller.showWidgets();
+      return true;
+    }
+    return false;
+  }
+
   /// The function [didChangeAppLifecycleState] listens to app lifecycle changes
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

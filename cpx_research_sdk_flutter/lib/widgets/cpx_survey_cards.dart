@@ -9,6 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../cpx_data.dart';
+import '../cpx_controller.dart';
+import '../enumerations/cpx_browser_tab.dart';
+import 'cpx_browser_view.dart';
 
 class CPXSurveyCards extends StatefulWidget {
   final CPXCardConfig? config;
@@ -146,7 +149,24 @@ class _CPXCard extends StatelessWidget {
         ),
         onPressed: () {
           HapticFeedback.selectionClick();
-          showCPXBrowserOverlay(survey.id);
+          // Fix for back button: Instead of global overlay state switch (which ignores system back button), 
+          // we use standard Flutter Navigator to display the webview so it works with the back button.
+          CPXController.controller.activeTab = CPXBrowserTab.home;
+          CPXController.controller.isSingleSurveyDisplayed = true;
+          CPXController.controller.singleSurveyID = survey.id;
+          
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                backgroundColor: Colors.black38,
+                body: CPXBrowserView(
+                  CPXBrowserTab.home,
+                  onClose: () => Navigator.pop(context),
+                ),
+              ),
+            ),
+          );
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
