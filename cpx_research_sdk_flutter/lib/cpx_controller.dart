@@ -1,10 +1,10 @@
-/*
- * cpx_controller.dart
- * CPX Research
- *
- * Created by Dennis Kossmann on 7.7.2021.
- * Copyright © 2021. All rights reserved.
- */
+// /*
+//  * cpx_controller.dart
+//  * CPX Research
+//  *
+//  * Created by Dennis Kossmann on 7.7.2021.
+//  * Copyright © 2021. All rights reserved.
+//  */
 
 import 'package:cpx_research_sdk_flutter/enumerations/cpx_browser_tab.dart';
 import 'package:cpx_research_sdk_flutter/utils/cpx_logger.dart';
